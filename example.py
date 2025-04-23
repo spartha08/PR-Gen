@@ -28,6 +28,7 @@ try:
 
     # Iterate over all issues
     for issue in iterator:
+        print(f"Issue {issue}")
         print(f"Issue Key: {issue.get('key')}")
         print(f"Severity: {issue.get('severity')}")
         print(f"Message: {issue.get('message')}")
