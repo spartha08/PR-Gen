@@ -64,6 +64,8 @@ class FixGenerator:
         - Message: {issue.get('message')}
         - Component: {issue.get('component')}
         - Line: {issue.get('line')}
+        
+        Code Context: {self.iterator.get_file_line_context(issue.get('component'), issue.get('line'), 5)}
 
         Please provide the fix as a valid Git patch.
         """
