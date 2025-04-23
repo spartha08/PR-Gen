@@ -452,71 +452,71 @@ class SonarQubeIssueIterator:
 
 
 # Example usage showing how to handle the 403 error you encountered
-if __name__ == "__main__":
-    import sys
-    import getpass
+# if __name__ == "__main__":
+#     import sys
+#     import getpass
     
-    # Set up logging
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=[logging.StreamHandler(sys.stdout)]
-    )
-    logger = logging.getLogger("sonarqube_example")
+#     # Set up logging
+#     logging.basicConfig(
+#         level=logging.INFO,
+#         format="%(asctime)s [%(levelname)s] %(message)s",
+#         handlers=[logging.StreamHandler(sys.stdout)]
+#     )
+#     logger = logging.getLogger("sonarqube_example")
     
-    # Get credentials interactively (safer than hardcoding)
-    print("SonarQube Authentication")
-    url = input("SonarQube URL (default: http://localhost:9000): ") or "http://localhost:9000"
+#     # Get credentials interactively (safer than hardcoding)
+#     print("SonarQube Authentication")
+#     url = input("SonarQube URL (default: http://localhost:9000): ") or "http://localhost:9000"
     
-    auth_type = input("Authentication type (token/user) [token]: ") or "token"
+#     auth_type = input("Authentication type (token/user) [token]: ") or "token"
     
-    if auth_type.lower() == "token":
-        token = getpass.getpass("Enter your SonarQube token: ")
-        config = SonarQubeConfig(url=url, token=token)
-    else:
-        username = input("Username: ")
-        password = getpass.getpass("Password: ")
-        config = SonarQubeConfig(url=url, username=username, password=password)
+#     if auth_type.lower() == "token":
+#         token = getpass.getpass("Enter your SonarQube token: ")
+#         config = SonarQubeConfig(url=url, token=token)
+#     else:
+#         username = input("Username: ")
+#         password = getpass.getpass("Password: ")
+#         config = SonarQubeConfig(url=url, username=username, password=password)
     
-    # Set project key
-    project_key = input("Project key (default: pet-shop-api): ") or "pet-shop-api"
-    config.project_key = project_key
+#     # Set project key
+#     project_key = input("Project key (default: pet-shop-api): ") or "pet-shop-api"
+#     config.project_key = project_key
     
-    try:
-        # Create iterator
-        iterator = SonarQubeIssueIterator(config, logger=logger)
+#     try:
+#         # Create iterator
+#         iterator = SonarQubeIssueIterator(config, logger=logger)
         
-        # Print current user info
-        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(f"Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): {current_time}")
+#         # Print current user info
+#         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#         print(f"Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): {current_time}")
         
-        for idx, first_issue in enumerate(iterator, 1):
-            # Try to get source code
-            try:
-                if first_issue:
-                    print(f"Iter {first_issue}")
-                    component_key = first_issue.get('component')
-                    print(f"Fetching source code for {component_key}...")
+#         for idx, first_issue in enumerate(iterator, 1):
+#             # Try to get source code
+#             try:
+#                 if first_issue:
+#                     print(f"Iter {first_issue}")
+#                     component_key = first_issue.get('component')
+#                     print(f"Fetching source code for {component_key}...")
             
-                    source_code = iterator.get_source_code(component_key)
-                    if source_code:
-                        print(f"Successfully retrieved {len(source_code)} characters of source code")
-                        # Show first 100 characters as preview
-                        preview = source_code[:100].replace('\n', ' ') + ('...' if len(source_code) > 100 else '')
-                        print(f"Preview: {source_code}")
-                    else:
-                        print("Failed to retrieve source code. Check your permissions.")
-                        print("You need 'Browse' permission on the project to access source code.")
+#                     source_code = iterator.get_source_code(component_key)
+#                     if source_code:
+#                         print(f"Successfully retrieved {len(source_code)} characters of source code")
+#                         # Show first 100 characters as preview
+#                         preview = source_code[:100].replace('\n', ' ') + ('...' if len(source_code) > 100 else '')
+#                         print(f"Preview: {source_code}")
+#                     else:
+#                         print("Failed to retrieve source code. Check your permissions.")
+#                         print("You need 'Browse' permission on the project to access source code.")
                 
-                        # Suggest solutions
-                        print("\nPossible solutions:")
-                        print("1. Use a token with more permissions")
-                        print("2. Ask your SonarQube administrator to grant you 'Browse' permission")
-                        print("3. If you're an admin, you can grant yourself permission in the project settings")
+#                         # Suggest solutions
+#                         print("\nPossible solutions:")
+#                         print("1. Use a token with more permissions")
+#                         print("2. Ask your SonarQube administrator to grant you 'Browse' permission")
+#                         print("3. If you're an admin, you can grant yourself permission in the project settings")
             
-            except SonarQubeAuthError as e:
-                print(f"Authentication error: {str(e)}")
-            except SonarQubePermissionError as e:
-                print(f"Permission error: {str(e)}")
-    except Exception as e:
-        print(f"Error: {str(e)}")
+#             except SonarQubeAuthError as e:
+#                 print(f"Authentication error: {str(e)}")
+#             except SonarQubePermissionError as e:
+#                 print(f"Permission error: {str(e)}")
+#     except Exception as e:
+#         print(f"Error: {str(e)}")
