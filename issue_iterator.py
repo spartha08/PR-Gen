@@ -144,7 +144,7 @@ class SonarQubeIssueIterator:
             if self._exhausted:
                 raise StopIteration
             self._fetch_next_batch()
-            if not self._fetched_issues:
+            if not self._fetched_issues or self._current_index >= len(self._fetched_issues):
                 raise StopIteration
         
         issue = self._fetched_issues[self._current_index]
