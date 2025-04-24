@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import logging
 from issue_iterator import SonarQubeConfig, SonarQubeIssueIterator
+from fix_generator import FixGenerator
 
 # Set up logging
 logging.basicConfig(
@@ -25,6 +26,7 @@ config = SonarQubeConfig(
 try:
     # Create an instance of the SonarQubeIssueIterator
     iterator = SonarQubeIssueIterator(config, batch_size=50, logger=logger)
+    fg = FixGenerator(config, "aws_access_key", "aws_secret_key", "us-west-2", "model_id", logger=logger)
 
     # Iterate over all issues
     for issue in iterator:
@@ -34,7 +36,9 @@ try:
         print(f"Message: {issue.get('message')}")
         print(f"Component: {issue.get('component')}")
         print(f"Line: {issue.get('line')}")
-        print(f"Source Code: \n {iterator.get_source_code(issue.get('component'))}")
+        print(f"Source Code: \n {iterator.get_file_line_context(issue.get('component'), issue.get('line'), 5)}")
+        print("-" * 40)
+        print(f"Prompt: {fg.create_prompt(issue)}")
         print("-" * 40)
 
 except Exception as e:
